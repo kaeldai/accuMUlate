@@ -10,9 +10,14 @@
 #ifndef EM_SUMMARY_STAT_H_
 #define EM_SUMMARY_STAT_H_
 
+#include <iostream>
 #include <vector>
 #include <memory>
-#include <stddef.h>
+#include <Eigen/Dense>
+#include <mutex>
+#include <atomic>
+
+//#include <stddef.h>
 
 class EmSummaryStat {
 
@@ -20,30 +25,56 @@ class EmSummaryStat {
 public:
     EmSummaryStat();
     EmSummaryStat(int const stat_count0);
-    virtual ~EmSummaryStat() {
+
+
+
+    EmSummaryStat(const EmSummaryStat& other){
+//        this = EmSummaryStat(2);
+        this->ChangeStatCount(other.stat_count);
+//        std::cout << other.stat_count << "\t" << this->GetStatCount() << "\t" << other.stat_count << "\t" << this->stat_count<< std::endl;
+//        std::cout << other.stat[0] << std::endl;
+//        std::cout << other.stat[1] << std::endl;
+//        for (int i = 0; i < other.stat_count; ++i) {
+////            std::cout << "set:" << i << std::endl;
+//            this->SetStat(i, other.stat[i]);
+//        }
+        this->stat = other.stat;
     }
 
+    virtual ~EmSummaryStat() = default;
 
-    double GetStat(int index);
-    //CHECK: These don't have to be virtual right??
-    virtual void SetStat(int index, double stat0);
-    virtual void SetStats(std::vector<double> stats);
+    virtual void Reset() final;
+    virtual double GetStat(int index) final;
+    virtual size_t GetStatCount() final;
 
-    virtual void print();
-    virtual void Reset();
-    virtual void UpdateSumWithProportion(double &d, std::unique_ptr<EmSummaryStat> &em_stat_local);
-    virtual void UpdateSumWithProportion(double d, std::vector<double> &temp_stats);
+
+    virtual std::vector<double>& GetStats() final;
+    virtual void SetStat(int index, double stat0) final;
+    virtual void SetStats(std::vector<double> stats) final;
 
 
 
     virtual double MaximiseStats();
+    virtual void Print();
+    virtual void UpdateSumWithProportion(double &d, std::unique_ptr<EmSummaryStat> &em_stat_local);
+    virtual void UpdateSumWithProportion(double proportion, std::vector<double> &temp_stats);
 
-    size_t GetStatCount();
+    virtual void UpdateSumWithProportionSynchronized(std::vector<double> &temp_stats);
+
 
 protected:
-    int const stat_count;//int const stat_count;
-    std::vector<double> stat;
+    int stat_count;
 
+    std::vector<double> stat;
+    std::mutex stat_mutex;
+//    std::lock_guard<std::mutex> lock(g_i_mutex);
+
+//    std::atomic<std::vector<double>> stat;
+//    std::vector<std::atomic<double>> stat ;
+//    boost::lockfree::queue<double> stas;
+
+private:
+    void ChangeStatCount(int new_count);
 
 };
 

@@ -11,7 +11,8 @@
 #define EM_MODEL_MUTATION_H_
 
 
-#include "mutation_model.h"
+#include <mutations/model.h>
+#include <mutations/mutation_model.h>
 #include "em_model.h"
 
 class EmModelMutation : public EmModel {
@@ -26,11 +27,11 @@ public:
 
     virtual void UpdateParameter(double param);
 
-    virtual void UpdateSummaryStat(int site_index, double &prob, std::vector<double> &temp_stat);
+    virtual void UpdateSummaryStat(int site_index, double &prob, std::vector<double> &temp_stat, double &log_likelihood_scaler);
 
     virtual size_t GetDataCount();
 
-    void GetParameterInfo();
+    virtual void GetParameterInfo();
 
 //    EvolutionModel * GetEvoModel();
 //    EvolutionModel * GetEvoModel() const;

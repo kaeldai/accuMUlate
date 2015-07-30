@@ -3,8 +3,7 @@
 #define __F81_H_
 
 
-#include <model.h>
-#include "mutation_prob.h"
+
 #include "EvolutionModel.h"
 
 class F81 : public EvolutionModel{
@@ -23,7 +22,7 @@ public:
 
     virtual std::unique_ptr<EvolutionModel> Clone() const;
     virtual EvolutionModel *Clone2() const;
-    virtual void UpdateExpBeta(double exp_beta);
+    virtual void UpdateOneMinusExpBeta(double exp_beta);
 
     double m1();
     double m2();
@@ -42,7 +41,7 @@ private:
     Eigen::Matrix4d m;
 
 
-
+    void OtherTransitionMatrix();
 };
 
 

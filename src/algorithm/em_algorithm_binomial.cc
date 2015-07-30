@@ -9,7 +9,6 @@
 #include <stddef.h>
 #include "em_algorithm_binomial.h"
 #include "em_summary_stat_binomial.h"
-#include "em_algorithm.h"
 
 EmAlgorithmBinomial::EmAlgorithmBinomial(int num_category0, std::vector<std::unique_ptr<EmData>> &data_ptr0, EmModelBinomial &em_model0)
         : EmAlgorithm(num_category0, data_ptr0, em_model0) {
@@ -23,17 +22,17 @@ EmAlgorithmBinomial::EmAlgorithmBinomial(int num_category0, std::vector<std::uni
 
 void EmAlgorithmBinomial::InitialiseSummaryStat() {
 
-    em_stat_local_single = std::unique_ptr<EmSummaryStat>(new EmSummaryStatBinomial());
-    em_stat_local_single->print();
+//    em_stat_local_single = std::unique_ptr<EmSummaryStat>(new EmSummaryStatBinomial());
+//    em_stat_local_single->Print();
     temp_stats = std::vector<std::vector<double>>(num_category);
     for (size_t i = 0; i < num_category; ++i) {
         all_em_stats.emplace_back(new EmSummaryStatBinomial());
-        temp_stats[i] = std::vector<double>(em_stat_local_single->GetStatCount());
+        temp_stats[i] = std::vector<double>(all_em_stats[i]->GetStatCount());
     }
 
 }
 
-void EmAlgorithmBinomial::Run() {
+void EmAlgorithmBinomial::RunEM() {
 
     size_t i = 0;
     bool isConverged = true;

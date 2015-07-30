@@ -8,7 +8,8 @@
 #ifndef DIRICHLETMULTINOMIALDISTRIBUTION_H_
 #define DIRICHLETMULTINOMIALDISTRIBUTION_H_
 
-#include "../model.h"
+#include <mutations/model.h>
+
 
 class DirichletMultinomialDistribution {
 public:
@@ -16,11 +17,11 @@ public:
 	virtual ~DirichletMultinomialDistribution();
 
 //	double DirichletMultinomialLogProbability(double alphas[4], ReadData data);
-	void DirichletMultinomialRandom(double alhpas[4], ReadData &data);
+//	void DirichletMultinomialRandom(double alhpas[4], ReadData &data);
 
 
 };
 
-double DirichletMultinomialLogProbability(double alphas[4], ReadData data);
+double DirichletMultinomialLogProbability(double (&alphas)[4], ReadData const &data);
 
 #endif /* DIRICHLETMULTINOMIALDISTRIBUTION_H_ */

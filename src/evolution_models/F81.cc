@@ -42,6 +42,13 @@ F81::F81(F81 const &self) : EvolutionModel(self.GetMutationProb()) {
 //}
 
 
+void F81::UpdateOneMinusExpBeta(double exp_beta) {
+//FIXME: clarify expBeta or 1-expBeta, shoulde be 1-expBeta here
+	double mu = mu_prob.ConvertOneMinusExpBetaToMu(exp_beta);
+	UpdateMu(mu);
+}
+
+
 
 void F81::UpdateTransitionMatrix() {
 
@@ -102,11 +109,6 @@ void F81::UpdateTransitionMatrix() {
 
 }
 
-
-void F81::UpdateExpBeta(double exp_beta) {
-	double mu = mu_prob.ConvertExpBetaToMu(exp_beta);
-	UpdateMu(mu);
-}
 
 
 
@@ -214,7 +216,47 @@ MutationMatrix MutationProb::MutationAccumulation(const ModelParams &params, boo
 }
 
 
+
+
  */
+
+
+
+void F81::OtherTransitionMatrix() {
+
+	exp_beta = mu_prob.GetExpBeta();
+
+	double one_minus_exp_beta_half = (1.0 - exp_beta) * 0.5;
+
+	for (int i : {0, 1, 2, 3}) {
+		double prob = freqs[i] * one_minus_exp_beta_half;
+		m.col(i) = Eigen::Vector4d::Constant(prob);
+	}
+	m.diagonal() += Eigen::Vector4d::Constant(exp_beta * 0.5);//moved  *0.5 here
+
+	//TODO: Need this to calculate zero mutation and estimate P(M=1)
+	MutationMatrix transition_matrix_mutation_a_to_d = MutationMatrix::Zero();
+	for (int l = 0; l < 16; ++l) {
+		auto index4_4 = LookupTable::index_converter_16_to_4_4[l];
+
+		for (int k : {0, 1, 2, 3}) {
+			for (auto item : index4_4) {
+				if( item != k ){
+					transition_matrix_mutation_a_to_d(l, k) += m(item, k);
+				}
+			}
+//			if( index4_4[0] != k ){
+//				transition_matrix_mutation_a_to_d(l, k) += m(index4_4[0], k)
+//			}
+//			transition_matrix_a_to_d(l, k) = (m(index4_4[0], k) + m(index4_4[1], k));
+//			l = i*4+j
+//			if(i != k)
+//				result(,k) += 0.5*m(i,k);
+//			if( j != k)
+//				result(i*4+j,k) += 0.5*m(j,k);
+		}
+	}
+}
 std::unique_ptr<EvolutionModel> F81::Clone() const {
 //	printf("call F81 clone function\n");
 	return std::unique_ptr<EvolutionModel> (new F81(*this) );

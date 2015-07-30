@@ -1,6 +1,9 @@
-#include <model.h>
-#include <mutation_prob.h>
 #include <memory>
+#include <mutations/mutation_prob.h>
+
+
+#include <mutations/model.h>
+
 #pragma once
 #ifndef __EvolutionModel_H_
 #define __EvolutionModel_H_
@@ -32,7 +35,7 @@ public:
     MutationProb GetMutationProb();
     MutationProb GetMutationProb() const;
 
-    virtual void UpdateExpBeta(double d) = 0;
+    virtual void UpdateOneMinusExpBeta(double d) = 0;//FIXME, clarify expBeta or 1-expBeta, should be 1-expBeta here
 
     virtual std::unique_ptr<EvolutionModel> Clone() const = 0;
     virtual EvolutionModel *Clone2() const = 0;

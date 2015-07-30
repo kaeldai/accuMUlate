@@ -67,12 +67,12 @@ TEST_F(F81Test, F81EqualDoubleConstructorTest) {
     F81 model (mu);
     MutationProb prob = model.GetMutationProb();
     double expected_exp_beta = 0.8;
-    ASSERT_DOUBLE_EQ(mu, prob.GetMu0());
+    ASSERT_DOUBLE_EQ(mu, prob.GetMu());
     ASSERT_DOUBLE_EQ(expected_exp_beta, prob.GetExpBeta());
 
-    MutationRate mu_rate = prob.GetMutationRate();
-    ASSERT_DOUBLE_EQ(expected_exp_beta, mu_rate.one_minus_p);
-    ASSERT_DOUBLE_EQ(1-expected_exp_beta, mu_rate.prob);
+    double mu_rate = prob.GetMutationRate();
+//    ASSERT_DOUBLE_EQ(expected_exp_beta, mu_rate.one_minus_p);
+    ASSERT_DOUBLE_EQ(1-expected_exp_beta, mu_rate);
 
     MutationMatrix matrix = model.GetTranstionMatirxAToD();
 
@@ -157,13 +157,16 @@ TEST_F(F81Test, F81NotEqualUpdateTest) {
 
     MutationProb prob = model.GetMutationProb();
     double expected_exp_beta = 0.4;
-    ASSERT_DOUBLE_EQ(new_mu, prob.GetMu0());
+    ASSERT_DOUBLE_EQ(new_mu, prob.GetMu());
     ASSERT_DOUBLE_EQ(expected_exp_beta, prob.GetExpBeta());
 
-    MutationRate mu_rate = prob.GetMutationRate();
-    ASSERT_DOUBLE_EQ(expected_exp_beta, mu_rate.one_minus_p);
-    ASSERT_DOUBLE_EQ(1-expected_exp_beta, mu_rate.prob);
-    
+//    MutationRate mu_rate = prob.GetMutationRate();
+//    ASSERT_DOUBLE_EQ(expected_exp_beta, mu_rate.one_minus_p);
+//    ASSERT_DOUBLE_EQ(1-expected_exp_beta, mu_rate.prob);
+    double mu_rate = prob.GetMutationRate();
+//    ASSERT_DOUBLE_EQ(expected_exp_beta, mu_rate.one_minus_p);
+    ASSERT_DOUBLE_EQ(1-expected_exp_beta, mu_rate);
+
     MutationMatrix matrix = model.GetTranstionMatirxAToD();
     MutationMatrix expected_matrix = MutationMatrix::Zero();
     // A -> A     = 0.6*0.1  + 0.4 = 0.46   => 0.46 * 0.5 = 0.23

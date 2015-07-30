@@ -16,21 +16,18 @@
 
 class EmSummaryStatBinomial : public EmSummaryStat {
 
-    static const int EM_SUMMARY_STAT_BINOMIAL_STATS_COUNT = 2;
+
 
 public:
+    static const int EM_SUMMARY_STAT_BINOMIAL_STATS_COUNT = 2;
     /*
     stat[0] = stat_same;
     stat[1] = stat_diff;
-
      */
 
     EmSummaryStatBinomial();
 
-    virtual ~EmSummaryStatBinomial() {
-    }
-
-
+    virtual ~EmSummaryStatBinomial(){}
 
     virtual double MaximiseStats();
 };

@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include "em_data_mutation_v1.h"
-#include "em_model_mutation_v1.h"
 
 
 EmDataMutationV1::EmDataMutationV1(SequenceProb &sequence_prob, EvolutionModel &evo_model){
@@ -10,17 +9,21 @@ EmDataMutationV1::EmDataMutationV1(SequenceProb &sequence_prob, EvolutionModel &
 }
 
 
+EmDataMutationV1::EmDataMutationV1(SiteGenotypes &sequence_prob, EvolutionModel &evo_model){
+    site = SiteProb(sequence_prob, evo_model);
+}
+
 EmDataMutationV1::~EmDataMutationV1() {}
 
 
 void EmDataMutationV1::UpdateSummaryStat(double &prob, std::unique_ptr<EmSummaryStat> &summaryStat) {
 
-    summaryStat->print();
+    summaryStat->Print();
     prob = 0;
     double stat_same = 0;
     double stat_diff = 0;
     //relpace with
-//    EmSummaryStatMutationV1 local;
+//    EmSummaryStatMutation local;
 
     site.CalculateAncestorToDescendant(prob, stat_same, stat_diff);
 
@@ -62,7 +65,7 @@ void EmDataMutationV1::UpdateEmModel(EmModel *em_model) {
 
 void EmDataMutationV1::UpdateSummaryStat(double &prob, std::vector<double> &temp_stat) {
 
-//    summaryStat->print();
+//    summaryStat->Print();
     prob = 0;
     double stat_same = 0;
     double stat_diff = 0;
